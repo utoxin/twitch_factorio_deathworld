@@ -1,9 +1,9 @@
 {
   "name": "twitch_deathworld",
   "version": "0.1.0",
-  "title": "Twitch Deathworld",
+  "title": "Twitch Reward Tools",
   "author": "Dinnerbone",
   "factorio_version": "1.1",
   "dependencies": ["base >= 1.1"],
-  "description": "Integrations for Dinnerbone's Deathworld streams."
+  "description": "Integrations for Twitch Custom Rewards"
 }
