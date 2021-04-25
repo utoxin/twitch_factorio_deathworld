@@ -44,7 +44,7 @@ local function check_for_expired_buffs (nth_tick_event)
     for player_index, buff_details in pairs(global.player_buffs) do
         for buff_name, buff_value in pairs(buff_details) do
             if buff_value["remaining_seconds"] == 0 then
-                reset_player_buff(player_index, buff_name)
+                pcall(reset_player_buff, player_index, buff_name)
             else
                buff_value["remaining_seconds"] = buff_value["remaining_seconds"] - 1
             end
@@ -68,11 +68,11 @@ script.on_event(defines.events.on_player_joined_game, function(event)
 end)
 
 script.on_event(defines.events.on_pre_player_left_game, function(event)
-    if global.player_buffs == nil then
+    if global.player_buffs == nil or global.player_buffs[event.player_index] == nil then
         return
     end
     for buff_name, buff_value in pairs(global.player_buffs[event.player_index]) do
-        reset_player_buff(event.player_index, buff_name)
+        pcall(reset_player_buff, event.player_index, buff_name)
     end
     global.player_buffs[event.player_index] = nil
 end)
@@ -330,6 +330,24 @@ remote.add_interface("twitch_deathworld",{
             return
         end
         rcon.print("worked")
+        return
+    end,
+
+    drop_meteor = function(name, targetName, count, range)
+        if not remote.interfaces["space-exploration"] then
+            rcon.print("failed|Space Exploration not active")
+            return
+        end
+
+        local target_player = get_target_player_from_name(targetName)
+        if target_player then
+            remote.call("space-exploration", "begin_meteor_shower", {target_entity = target_player, meteors = count, range = range})
+            target_player.force.print({"", "[Twitch] ", name, " spawned a meteor (or a few...) on top of ", target_player.name, ". Awww, feel the love!"}, {0.8, 0.2, 0.2, 1})
+            rcon.print("worked")
+            return
+        end
+
+        rcon.print("failed|Unable to find player by that name")
         return
     end,
 });
