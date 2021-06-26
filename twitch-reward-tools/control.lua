@@ -77,7 +77,7 @@ script.on_event(defines.events.on_pre_player_left_game, function(event)
     global.player_buffs[event.player_index] = nil
 end)
 
-remote.add_interface("twitch_deathworld",{
+remote.add_interface("twitch_reward_tools",{
     help_research = function (name, amount)
         local player = game.players[1];
         local force = player.force;
@@ -123,12 +123,13 @@ remote.add_interface("twitch_deathworld",{
     plant_tree = function (name, targetName, amount, silent)
         local planted = false;
         local targetPlayer = get_target_player_from_name(targetName)
+        local targetSurface = targetPlayer.surface
 
         if targetPlayer then
             for i = 1, tonumber(amount) do
                 local targetX = targetPlayer.position.x + math.random(-6, 6);
                 local targetY = targetPlayer.position.y + math.random(-6, 6);
-                local createdEntity = game.surfaces.nauvis.create_entity({name="tree-01", amount=1, position={targetX, targetY}});
+                local createdEntity = targetSurface.create_entity({name="tree-01", amount=1, position={targetX, targetY}});
                 if createdEntity then
                     planted = true;
                 end
@@ -227,6 +228,8 @@ remote.add_interface("twitch_deathworld",{
         if targetPlayer then
             local centerX = targetPlayer.position.x + math.cos(angle) * distanceToPlayer;
             local centerY = targetPlayer.position.y + math.sin(angle) * distanceToPlayer;
+            local targetSurface = targetPlayer.surface
+
             local anglePerBase = (math.pi * 2) / tonumber(amountOfBases);
             local anglePerWorm = (math.pi * 2) / tonumber(amountOfWorms);
 
@@ -234,7 +237,7 @@ remote.add_interface("twitch_deathworld",{
                 local targetX = centerX + math.cos((i - 1) * anglePerBase) * baseSize;
                 local targetY = centerY + math.sin((i - 1) * anglePerBase) * baseSize;
                 local entityType = baseNames[math.random(#baseNames)]
-                local createdEntity = game.surfaces.nauvis.create_entity({name=entityType, amount=1, position={targetX, targetY}});
+                local createdEntity = targetSurface.create_entity({name=entityType, amount=1, position={targetX, targetY}});
                 if createdEntity then
                     planted = true;
                 end
@@ -244,7 +247,7 @@ remote.add_interface("twitch_deathworld",{
                 local targetX = centerX + math.cos((i - 1) * anglePerWorm) * (baseSize * 1.5);
                 local targetY = centerY + math.sin((i - 1) * anglePerWorm) * (baseSize * 1.5);
                 local entityType = wormNames[math.random(#wormNames)]
-                local createdEntity = game.surfaces.nauvis.create_entity({name=entityType, amount=1, position={targetX, targetY}});
+                local createdEntity = targetSurface.create_entity({name=entityType, amount=1, position={targetX, targetY}});
                 if createdEntity then
                     planted = true;
                 end
@@ -254,7 +257,7 @@ remote.add_interface("twitch_deathworld",{
                 local targetX = centerX + math.random(-baseSize, baseSize);
                 local targetY = centerY + math.random(-baseSize, baseSize);
                 local entityType = enemyNames[math.random(#enemyNames)]
-                local createdEntity = game.surfaces.nauvis.create_entity({name=entityType, amount=1, position={targetX, targetY}});
+                local createdEntity = targetSurface.create_entity({name=entityType, amount=1, position={targetX, targetY}});
                 if createdEntity then
                     planted = true;
                 end
