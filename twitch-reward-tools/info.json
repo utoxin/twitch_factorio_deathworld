@@ -2,7 +2,7 @@
   "name": "twitch-reward-tools",
   "version": "0.1.4",
   "title": "Twitch Reward Tools",
-  "author": "Dinnerbone (tweaked by Utoxin)",
+  "author": "Dinnerbone (Original Author), Utoxin (Bugfixes, Cleanup)",
   "factorio_version": "1.1",
   "dependencies": ["base >= 1.1", "?space-exploration"],
   "description": "Integrations for Twitch Custom Rewards"
